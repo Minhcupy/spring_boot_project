@@ -6,18 +6,18 @@ import java.util.stream.Collectors;
 
 import jakarta.transaction.Transactional;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.springboot.springbootproject.constant.PredefinedRole;
 import com.springboot.springbootproject.dto.request.UserCreationRequest;
 import com.springboot.springbootproject.dto.request.UserUpdateRequest;
 import com.springboot.springbootproject.dto.response.UserResponse;
+import com.springboot.springbootproject.entity.Role;
 import com.springboot.springbootproject.entity.User;
-import com.springboot.springbootproject.enums.Role;
 import com.springboot.springbootproject.exception.AppException;
 import com.springboot.springbootproject.exception.ErrorCode;
 import com.springboot.springbootproject.mapper.UserMapper;
@@ -42,18 +42,17 @@ public class UserService {
     PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(UserCreationRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            throw new AppException(ErrorCode.USER_EXISTED);
-        }
+        if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
+
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<String> roles = new HashSet<>();
-        roles.add(Role.USER.name());
+        HashSet<Role> roles = new HashSet<>();
+        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
 
-//               user.setRoles(roles);
-        userRepository.save(user);
-        return userMapper.toUserResponse(user);
+        user.setRoles(roles);
+
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
     public UserResponse getMyInfo() {
