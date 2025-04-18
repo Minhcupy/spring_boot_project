@@ -113,4 +113,13 @@ jacocoTestReport {
     tasks.named('test') {
         useJUnitPlatform()
     }
+    tasks.register('checkTask') {
+        doLast {
+            // Thực hiện kiểm tra hoặc các hành động bạn cần.
+            println 'Running check task during compile phase.'
+        }
+    }
+
+    compileJava.dependsOn checkTask
+
 }
