@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "spring.security.basic.enabled",
+      "type": "java.lang.String",
+      "description": "Description for spring.security.basic.enabled."
+  }
+] }

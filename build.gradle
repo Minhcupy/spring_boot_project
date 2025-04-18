@@ -1,0 +1,116 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+plugins {
+    id 'jacoco'
+}
+
+plugins {
+    id "org.sonarqube" version "4.4.1.3373"
+}
+
+
+plugins {
+    id 'com.diffplug.spotless' version '6.25.0' // hoặc version bạn đang dùng
+}
+
+spotless {
+    java {
+        removeUnusedImports()
+        toggleOffOn()
+        trimTrailingWhitespace()
+        endWithNewline()
+        indentWithTabs() // dùng tab
+        palantirJavaFormat()
+
+        importOrder 'java', 'jakarta', 'org', 'com', 'com.diffplug'
+    }
+}
+
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required = true
+        html.required = true
+    }
+
+    jacocoTestReport {
+        dependsOn test // Chạy test trước khi tạo báo cáo
+        reports {
+            html.required.set(true)
+            xml.required.set(false)
+            csv.required.set(false)
+        }
+        classDirectories.setFrom(
+                files(classDirectories.files.collect { fileTree(dir: it, exclude: [
+                        '**/com/springboot/springbootproject/dto/**', // Loại bỏ các lớp trong package com.springboot
+                        '**/com/springboot/springbootproject/entity/**', // Loại bỏ các lớp trong package com.springboot
+                        '**/com/springboot/springbootproject/mapper/**', // Loại bỏ các lớp trong package com.springboot
+                        '**/com/springboot/springbootproject/configuration/**' // Loại bỏ các lớp trong package com.springboot
+
+                ]) })
+        )
+    }
+
+    test {
+        finalizedBy jacocoTestReport
+    }
+
+
+    group = 'com.springboot'
+    version = '0.0.1-SNAPSHOT'
+
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+    }
+
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+        implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+        testImplementation 'org.springframework.security:spring-security-test'
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+        // Nếu dùng Lombok với MapStruct
+        compileOnly 'org.projectlombok:lombok'
+        implementation 'org.projectlombok:lombok:1.18.30'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.projectlombok:lombok:1.18.30'
+        testRuntimeOnly 'com.h2database:h2'
+        testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
+        annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+        runtimeOnly 'com.mysql:mysql-connector-j'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+        implementation enforcedPlatform('org.testcontainers:testcontainers-bom:1.19.7')
+        testImplementation 'org.testcontainers:junit-jupiter'
+        testImplementation 'org.testcontainers:mysql' // ví dụ thêm
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+}
