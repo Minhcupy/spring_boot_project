@@ -5,7 +5,8 @@ WORKDIR /app
 COPY . .
 
 # Build source code using Gradle wrapper (skip tests if desired)
-RUN ./gradlew build -x test
+RUN ./gradlew build -x test -x spotlessJavaCheck
+
 
 # Stage 2: create image
 FROM amazoncorretto:21.0.4
