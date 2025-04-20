@@ -5,7 +5,8 @@ WORKDIR /app
 COPY . .
 
 # Build source code using Gradle wrapper (skip tests if desired)
-RUN ./gradlew build -x test -x spotlessJavaCheck
+RUN ./gradlew spotlessApply
+RUN ./gradlew build -x test
 
 
 # Stage 2: create image
