@@ -29,10 +29,5 @@ public class User {
     LocalDate dob;
 
     @ManyToMany
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "roles_name") // Phải trùng với khóa chính của Role
-            )
     Set<Role> roles;
 }
