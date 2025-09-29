@@ -2,6 +2,7 @@ package com.springboot.springbootproject.controller;
 
 import java.util.List;
 
+import com.springboot.springbootproject.service.implement.UserService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,6 @@ import com.springboot.springbootproject.dto.request.UserCreationRequest;
 import com.springboot.springbootproject.dto.request.UserUpdateRequest;
 import com.springboot.springbootproject.dto.response.ApiResponse;
 import com.springboot.springbootproject.dto.response.UserResponse;
-import com.springboot.springbootproject.service.UserService;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

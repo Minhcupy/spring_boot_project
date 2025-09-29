@@ -35,16 +35,6 @@ public class ProductService {
     CategoryRepository categoryRepository;
     ProductMapper productMapper;
 
-    //    public ProductResponse createProduct(ProductCreationRequest request) {
-    //        Category category = categoryRepository.findById(request.getCategoryId())
-    //                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
-    //
-    //        Product product = productMapper.toProduct(request);
-    //        product.setCategory(category);
-    //
-    //        return productMapper.toProductResponse(productRepository.save(product));
-    //    }
-
     public ProductResponse createProduct(
             String name, Long categoryId, Integer quantity, BigDecimal price, String description, MultipartFile image) {
         Category category =
@@ -111,7 +101,6 @@ public class ProductService {
         return productRepository.findAll(pageable).map(productMapper::toProductResponse);
     }
 
-    // ✅ Helper: lưu ảnh
     private String saveImage(MultipartFile image) {
         if (image == null || image.isEmpty()) return null;
 

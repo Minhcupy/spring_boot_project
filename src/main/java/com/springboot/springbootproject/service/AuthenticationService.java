@@ -78,16 +78,25 @@ public class AuthenticationService {
         var user = userRepository
                 .findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
 
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!authenticated) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
-        var token = generateToken(user);
 
-        return AuthenticationResponse.builder().authenticated(true).token(token).build();
+        String accessToken = generateToken(user, VALID_DURATION);
+
+        String refreshToken = generateToken(user, REFRESHABLE_DURATION);
+
+        return AuthenticationResponse.builder()
+                .authenticated(true)
+                .token(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
+
 
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         try {
@@ -108,23 +117,19 @@ public class AuthenticationService {
     public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
         var signedJWT = verifyToken(request.getToken(), true);
 
-        var jit = signedJWT.getJWTClaimsSet().getJWTID();
-        var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-
-        InvalidatedToken invalidatedToken =
-                InvalidatedToken.builder().id(jit).expiryTime(expiryTime).build();
-
-        invalidatedTokenRepository.save(invalidatedToken);
-
         var username = signedJWT.getJWTClaimsSet().getSubject();
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
-        var user =
-                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+        var newAccessToken = generateToken(user, VALID_DURATION);
 
-        var token = generateToken(user);
-
-        return AuthenticationResponse.builder().token(token).authenticated(true).build();
+        return AuthenticationResponse.builder()
+                .token(newAccessToken)
+                .refreshToken(request.getToken())
+                .authenticated(true)
+                .build();
     }
+
 
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
 
@@ -151,7 +156,7 @@ public class AuthenticationService {
         return signedJWT;
     }
 
-    private String generateToken(User user) {
+    private String generateToken(User user, long durationSeconds) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
@@ -159,15 +164,14 @@ public class AuthenticationService {
                 .issuer("SpringBootProject.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()))
+                        Instant.now().plus(durationSeconds, ChronoUnit.SECONDS).toEpochMilli()
+                ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
-
         JWSObject jwsObject = new JWSObject(header, payload);
-
         try {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes(StandardCharsets.UTF_8)));
             return jwsObject.serialize();
