@@ -1,4 +1,4 @@
-package com.springboot.springbootproject.service.implement;
+package com.springboot.springbootproject.service;
 
 import com.springboot.springbootproject.dto.request.UserCreationRequest;
 import com.springboot.springbootproject.dto.request.UserUpdateRequest;

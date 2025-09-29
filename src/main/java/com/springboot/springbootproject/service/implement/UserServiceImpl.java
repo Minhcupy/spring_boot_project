@@ -1,9 +1,10 @@
-package com.springboot.springbootproject.service;
+package com.springboot.springbootproject.service.implement;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.springboot.springbootproject.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,6 @@ import com.springboot.springbootproject.exception.ErrorCode;
 import com.springboot.springbootproject.mapper.UserMapper;
 import com.springboot.springbootproject.repository.RoleRepository;
 import com.springboot.springbootproject.repository.UserRepository;
-import com.springboot.springbootproject.service.implement.UserService;
 
 @Slf4j
 @Service
