@@ -2,7 +2,7 @@ package com.springboot.springbootproject.controller;
 
 import java.util.List;
 
-import com.springboot.springbootproject.service.implement.UserService;
+import com.springboot.springbootproject.service.UserService;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;

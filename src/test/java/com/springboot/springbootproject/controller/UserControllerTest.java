@@ -2,7 +2,7 @@ package com.springboot.springbootproject.controller;
 
 import java.time.LocalDate;
 
-import com.springboot.springbootproject.service.implement.UserService;
+import com.springboot.springbootproject.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
