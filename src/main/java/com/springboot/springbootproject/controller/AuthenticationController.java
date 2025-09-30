@@ -2,6 +2,7 @@ package com.springboot.springbootproject.controller;
 
 import java.text.ParseException;
 
+import com.springboot.springbootproject.service.AuthenticationService;
 import org.springframework.web.bind.annotation.*;
 
 import com.nimbusds.jose.JOSEException;
@@ -12,7 +13,7 @@ import com.springboot.springbootproject.dto.request.RefreshRequest;
 import com.springboot.springbootproject.dto.response.ApiResponse;
 import com.springboot.springbootproject.dto.response.AuthenticationResponse;
 import com.springboot.springbootproject.dto.response.IntrospectResponse;
-import com.springboot.springbootproject.service.AuthenticationService;
+import com.springboot.springbootproject.service.implement.AuthenticationServiceImpl;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

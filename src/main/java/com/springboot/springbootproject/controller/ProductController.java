@@ -3,6 +3,7 @@ package com.springboot.springbootproject.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.springboot.springbootproject.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.springboot.springbootproject.dto.response.ApiResponse;
 import com.springboot.springbootproject.dto.response.ProductResponse;
-import com.springboot.springbootproject.service.ProductService;
+import com.springboot.springbootproject.service.implement.ProductServiceImpl;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

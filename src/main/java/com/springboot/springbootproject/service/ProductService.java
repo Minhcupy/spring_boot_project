@@ -1,127 +1,40 @@
 package com.springboot.springbootproject.service;
 
-import java.awt.*;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.springboot.springbootproject.dto.response.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.springboot.springbootproject.dto.response.ProductResponse;
-import com.springboot.springbootproject.entity.Category;
-import com.springboot.springbootproject.entity.Product;
-import com.springboot.springbootproject.exception.AppException;
-import com.springboot.springbootproject.exception.ErrorCode;
-import com.springboot.springbootproject.mapper.ProductMapper;
-import com.springboot.springbootproject.repository.CategoryRepository;
-import com.springboot.springbootproject.repository.ProductRepository;
+import java.math.BigDecimal;
+import java.util.List;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+public interface ProductService {
+    ProductResponse createProduct(
+            String name,
+            Long categoryId,
+            Integer quantity,
+            BigDecimal price,
+            String description,
+            MultipartFile image
+    );
 
-@Service
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ProductService {
-    ProductRepository productRepository;
-    CategoryRepository categoryRepository;
-    ProductMapper productMapper;
-
-    public ProductResponse createProduct(
-            String name, Long categoryId, Integer quantity, BigDecimal price, String description, MultipartFile image) {
-        Category category =
-                categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
-
-        String imageUrl = saveImage(image);
-
-        Product product = Product.builder()
-                .name(name)
-                .category(category)
-                .quantity(quantity)
-                .price(price)
-                .description(description)
-                .imageUrl(imageUrl)
-                .build();
-
-        return productMapper.toProductResponse(productRepository.save(product));
-    }
-
-    public ProductResponse updateProduct(
+    ProductResponse updateProduct(
             Long id,
             String name,
             Long categoryId,
             Integer quantity,
             BigDecimal price,
             String description,
-            MultipartFile image) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+            MultipartFile image
+    );
 
-        if (categoryId != null) {
-            Category category =
-                    categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
-            product.setCategory(category);
-        }
+    void deleteProduct(Long id);
 
-        if (name != null) product.setName(name);
-        if (quantity != null) product.setQuantity(quantity);
-        if (price != null) product.setPrice(price);
-        if (description != null) product.setDescription(description);
+    ProductResponse getProduct(Long id);
 
-        if (image != null && !image.isEmpty()) {
-            product.setImageUrl(saveImage(image));
-        }
+    List<ProductResponse> searchProducts(String keyword);
 
-        return productMapper.toProductResponse(productRepository.save(product));
-    }
+    Page<ProductResponse> getAllProducts(Pageable pageable);
 
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
-    }
-
-    public ProductResponse getProduct(Long id) {
-        return productMapper.toProductResponse(
-                productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY)));
-    }
-
-    public List<ProductResponse> searchProducts(String keyword) {
-        return productRepository.findByNameContainingIgnoreCase(keyword).stream()
-                .map(productMapper::toProductResponse)
-                .collect(Collectors.toList());
-    }
-
-    public Page<ProductResponse> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable).map(productMapper::toProductResponse);
-    }
-
-    private String saveImage(MultipartFile image) {
-        if (image == null || image.isEmpty()) return null;
-
-        try {
-            Path uploadDir = Paths.get("uploads");
-            if (!Files.exists(uploadDir)) {
-                Files.createDirectories(uploadDir);
-            }
-
-            String fileName = image.getOriginalFilename();
-
-            Path filePath = uploadDir.resolve(fileName);
-            Files.write(filePath, image.getBytes());
-
-            return fileName;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to save image", e);
-        }
-    }
-
-    public Page<ProductResponse> getProductsByCategory(Long categoryId, Pageable pageable) {
-        return productRepository.findByCategoryId(categoryId, pageable).map(productMapper::toProductResponse);
-    }
+    Page<ProductResponse> getProductsByCategory(Long categoryId, Pageable pageable);
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import com.springboot.springbootproject.dto.request.PermissionRequest;
 import com.springboot.springbootproject.dto.response.ApiResponse;
 import com.springboot.springbootproject.dto.response.PermissionResponse;
-import com.springboot.springbootproject.service.PermissionService;
+import com.springboot.springbootproject.service.implement.PermissionServiceImpl;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PermissionController {
-    PermissionService permissionService;
+    PermissionServiceImpl permissionService;
 
     @PostMapping
     ApiResponse<PermissionResponse> create(@RequestBody PermissionRequest request) {

@@ -1,6 +1,7 @@
 package com.springboot.springbootproject.controller;
 
 import com.springboot.springbootproject.service.ReportProductService;
+import com.springboot.springbootproject.service.implement.ReportProductServiceImpl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

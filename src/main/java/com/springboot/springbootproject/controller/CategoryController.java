@@ -2,12 +2,13 @@ package com.springboot.springbootproject.controller;
 
 import java.util.List;
 
+import com.springboot.springbootproject.service.CategoryService;
 import org.springframework.web.bind.annotation.*;
 
 import com.springboot.springbootproject.dto.request.CategoryRequest;
 import com.springboot.springbootproject.dto.response.ApiResponse;
 import com.springboot.springbootproject.dto.response.CategoryResponse;
-import com.springboot.springbootproject.service.CategoryService;
+import com.springboot.springbootproject.service.implement.CategoryServiceImpl;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
