@@ -1,10 +1,10 @@
 package com.springboot.springbootproject.service;
 
+import java.util.List;
+
 import com.springboot.springbootproject.dto.request.UserCreationRequest;
 import com.springboot.springbootproject.dto.request.UserUpdateRequest;
 import com.springboot.springbootproject.dto.response.UserResponse;
-
-import java.util.List;
 
 public interface UserService {
 

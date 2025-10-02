@@ -1,9 +1,9 @@
 package com.springboot.springbootproject.service;
 
+import java.util.List;
+
 import com.springboot.springbootproject.dto.request.CategoryRequest;
 import com.springboot.springbootproject.dto.response.CategoryResponse;
-
-import java.util.List;
 
 public interface CategoryService {
     CategoryResponse createCategory(CategoryRequest request);

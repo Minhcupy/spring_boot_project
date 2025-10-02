@@ -1,5 +1,18 @@
 package com.springboot.springbootproject.service.implement;
 
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.springboot.springbootproject.dto.response.ProductResponse;
 import com.springboot.springbootproject.entity.Category;
 import com.springboot.springbootproject.entity.Product;
@@ -9,21 +22,10 @@ import com.springboot.springbootproject.mapper.ProductMapper;
 import com.springboot.springbootproject.repository.CategoryRepository;
 import com.springboot.springbootproject.repository.ProductRepository;
 import com.springboot.springbootproject.service.ProductService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +37,10 @@ public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
 
     @Override
-    public ProductResponse createProduct(String name, Long categoryId, Integer quantity,
-                                         BigDecimal price, String description, MultipartFile image) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+    public ProductResponse createProduct(
+            String name, Long categoryId, Integer quantity, BigDecimal price, String description, MultipartFile image) {
+        Category category =
+                categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
         String imageUrl = saveImage(image);
 
@@ -55,14 +57,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponse updateProduct(Long id, String name, Long categoryId, Integer quantity,
-                                         BigDecimal price, String description, MultipartFile image) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+    public ProductResponse updateProduct(
+            Long id,
+            String name,
+            Long categoryId,
+            Integer quantity,
+            BigDecimal price,
+            String description,
+            MultipartFile image) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
         if (categoryId != null) {
-            Category category = categoryRepository.findById(categoryId)
-                    .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+            Category category =
+                    categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
             product.setCategory(category);
         }
 
@@ -86,14 +93,12 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductResponse getProduct(Long id) {
         return productMapper.toProductResponse(
-                productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY))
-        );
+                productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY)));
     }
 
     @Override
     public List<ProductResponse> searchProducts(String keyword) {
-        return productRepository.findByNameContainingIgnoreCase(keyword)
-                .stream()
+        return productRepository.findByNameContainingIgnoreCase(keyword).stream()
                 .map(productMapper::toProductResponse)
                 .collect(Collectors.toList());
     }

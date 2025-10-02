@@ -2,13 +2,12 @@ package com.springboot.springbootproject.controller;
 
 import java.util.List;
 
-import com.springboot.springbootproject.service.RoleService;
 import org.springframework.web.bind.annotation.*;
 
 import com.springboot.springbootproject.dto.request.RoleRequest;
 import com.springboot.springbootproject.dto.response.ApiResponse;
 import com.springboot.springbootproject.dto.response.RoleResponse;
-import com.springboot.springbootproject.service.implement.RoleServiceImpl;
+import com.springboot.springbootproject.service.RoleService;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -1,22 +1,17 @@
 package com.springboot.springbootproject.service;
 
-import com.springboot.springbootproject.dto.response.ProductResponse;
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
-import java.util.List;
+import com.springboot.springbootproject.dto.response.ProductResponse;
 
 public interface ProductService {
     ProductResponse createProduct(
-            String name,
-            Long categoryId,
-            Integer quantity,
-            BigDecimal price,
-            String description,
-            MultipartFile image
-    );
+            String name, Long categoryId, Integer quantity, BigDecimal price, String description, MultipartFile image);
 
     ProductResponse updateProduct(
             Long id,
@@ -25,8 +20,7 @@ public interface ProductService {
             Integer quantity,
             BigDecimal price,
             String description,
-            MultipartFile image
-    );
+            MultipartFile image);
 
     void deleteProduct(Long id);
 

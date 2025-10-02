@@ -4,12 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.springboot.springbootproject.service.UserService;
 import jakarta.transaction.Transactional;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +23,12 @@ import com.springboot.springbootproject.exception.ErrorCode;
 import com.springboot.springbootproject.mapper.UserMapper;
 import com.springboot.springbootproject.repository.RoleRepository;
 import com.springboot.springbootproject.repository.UserRepository;
+import com.springboot.springbootproject.service.UserService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -43,8 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserCreationRequest request) {
-        if (userRepository.existsByUsername(request.getUsername()))
-            throw new AppException(ErrorCode.USER_EXISTED);
+        if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -62,8 +62,7 @@ public class UserServiceImpl implements UserService {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
 
-        User user = userRepository.findByUsername(name)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         return userMapper.toUserResponse(user);
     }
@@ -71,8 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(user, request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -93,10 +91,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
         log.info("In method get Users");
-        return userRepository.findAll()
-                .stream()
-                .map(userMapper::toUserResponse)
-                .collect(Collectors.toList());
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -104,7 +99,6 @@ public class UserServiceImpl implements UserService {
     public UserResponse getUser(String id) {
         log.info("In method get User by id");
         return userMapper.toUserResponse(
-                userRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("User Not Found")));
+                userRepository.findById(id).orElseThrow(() -> new RuntimeException("User Not Found")));
     }
 }

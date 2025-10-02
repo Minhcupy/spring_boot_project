@@ -48,7 +48,13 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS)
                         .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/categories", "/products", "/products/search", "/images/**","/reports/**")
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/categories",
+                                "/products",
+                                "/products/search",
+                                "/images/**",
+                                "/reports/**")
                         .permitAll()
                         .anyRequest()
                         .authenticated())

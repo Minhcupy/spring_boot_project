@@ -1,19 +1,22 @@
 package com.springboot.springbootproject.service.implement;
 
+import java.util.List;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
 import com.springboot.springbootproject.dto.request.PermissionRequest;
 import com.springboot.springbootproject.dto.response.PermissionResponse;
 import com.springboot.springbootproject.entity.Permission;
 import com.springboot.springbootproject.mapper.PermissionMapper;
 import com.springboot.springbootproject.repository.PermissionRepository;
 import com.springboot.springbootproject.service.PermissionService;
-import jakarta.transaction.Transactional;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -35,9 +38,7 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<PermissionResponse> getAll() {
         var permissions = permissionRepository.findAll();
-        return permissions.stream()
-                .map(permissionMapper::toPermissionResponse)
-                .toList();
+        return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
     }
 
     @Override

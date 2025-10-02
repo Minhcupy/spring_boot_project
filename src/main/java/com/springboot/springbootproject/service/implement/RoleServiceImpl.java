@@ -1,20 +1,23 @@
 package com.springboot.springbootproject.service.implement;
 
+import java.util.HashSet;
+import java.util.List;
+
+import jakarta.transaction.Transactional;
+
+import org.springframework.stereotype.Service;
+
 import com.springboot.springbootproject.dto.request.RoleRequest;
 import com.springboot.springbootproject.dto.response.RoleResponse;
 import com.springboot.springbootproject.mapper.RoleMapper;
 import com.springboot.springbootproject.repository.PermissionRepository;
 import com.springboot.springbootproject.repository.RoleRepository;
 import com.springboot.springbootproject.service.RoleService;
-import jakarta.transaction.Transactional;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -40,9 +43,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<RoleResponse> getAll() {
-        return roleRepository.findAll().stream()
-                .map(roleMapper::toRoleResponse)
-                .toList();
+        return roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList();
     }
 
     @Override

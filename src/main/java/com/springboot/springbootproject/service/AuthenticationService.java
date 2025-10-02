@@ -1,15 +1,14 @@
 package com.springboot.springbootproject.service;
 
+import java.text.ParseException;
+
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jwt.SignedJWT;
 import com.springboot.springbootproject.dto.request.AuthenticationRequest;
 import com.springboot.springbootproject.dto.request.IntrospectRequest;
 import com.springboot.springbootproject.dto.request.LogoutRequest;
 import com.springboot.springbootproject.dto.request.RefreshRequest;
 import com.springboot.springbootproject.dto.response.AuthenticationResponse;
 import com.springboot.springbootproject.dto.response.IntrospectResponse;
-
-import java.text.ParseException;
 
 public interface AuthenticationService {
     IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException;

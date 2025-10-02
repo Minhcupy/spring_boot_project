@@ -1,5 +1,10 @@
 package com.springboot.springbootproject.service.implement;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.springboot.springbootproject.dto.request.CategoryRequest;
 import com.springboot.springbootproject.dto.response.CategoryResponse;
 import com.springboot.springbootproject.entity.Category;
@@ -8,13 +13,10 @@ import com.springboot.springbootproject.exception.ErrorCode;
 import com.springboot.springbootproject.mapper.CategoryMapper;
 import com.springboot.springbootproject.repository.CategoryRepository;
 import com.springboot.springbootproject.service.CategoryService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +38,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
         categoryMapper.updateCategory(category, request);
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
@@ -51,15 +52,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryResponse getCategory(Long id) {
         return categoryMapper.toCategoryResponse(
-                categoryRepository.findById(id)
-                        .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY))
-        );
+                categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY)));
     }
 
     @Override
     public List<CategoryResponse> getAllCategories() {
-        return categoryRepository.findAll()
-                .stream()
+        return categoryRepository.findAll().stream()
                 .map(categoryMapper::toCategoryResponse)
                 .collect(Collectors.toList());
     }
