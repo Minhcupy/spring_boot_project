@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
     ProductMapper productMapper;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse createProduct(
             String name, Long categoryId, Integer quantity, BigDecimal price, String description, MultipartFile image) {
         Category category =
@@ -57,6 +59,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse updateProduct(
             Long id,
             String name,
@@ -86,6 +89,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }

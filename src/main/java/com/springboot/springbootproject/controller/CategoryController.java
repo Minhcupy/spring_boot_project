@@ -2,6 +2,7 @@ package com.springboot.springbootproject.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import com.springboot.springbootproject.dto.request.CategoryRequest;
@@ -31,6 +32,15 @@ public class CategoryController {
     ApiResponse<List<CategoryResponse>> getAll() {
         return ApiResponse.<List<CategoryResponse>>builder()
                 .result(categoryService.getAllCategories())
+                .build();
+    }
+
+    @GetMapping("/paging")
+    ApiResponse<Page<CategoryResponse>> getPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return ApiResponse.<Page<CategoryResponse>>builder()
+                .result(categoryService.getCategories(page, size))
                 .build();
     }
 

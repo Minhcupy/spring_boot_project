@@ -3,6 +3,9 @@ package com.springboot.springbootproject.service.implement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.springboot.springbootproject.dto.request.CategoryRequest;
@@ -27,6 +30,7 @@ public class CategoryServiceImpl implements CategoryService {
     CategoryMapper categoryMapper;
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse createCategory(CategoryRequest request) {
         if (categoryRepository.existsByName(request.getName())) {
             throw new AppException(ErrorCode.INVALID_KEY);
@@ -37,6 +41,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
@@ -45,6 +50,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
     }
@@ -60,5 +66,12 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll().stream()
                 .map(categoryMapper::toCategoryResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<CategoryResponse> getCategories(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        return categoryRepository.findAll(pageable)
+                .map(categoryMapper::toCategoryResponse);
     }
 }

@@ -26,7 +26,6 @@ import lombok.experimental.FieldDefaults;
 public class ProductController {
     ProductService productService;
 
-    // ✅ Thêm mới sản phẩm (multipart/form-data)
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<ProductResponse> create(
             @RequestParam String name,
@@ -56,7 +55,6 @@ public class ProductController {
                 .build();
     }
 
-    // ✅ Update sản phẩm (có thể sửa cả ảnh)
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<ProductResponse> update(
             @PathVariable Long id,
