@@ -3,6 +3,7 @@ package com.springboot.springbootproject.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.springboot.springbootproject.dto.response.PagedResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,13 +41,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public ApiResponse<Page<ProductResponse>> getAll(
-            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "8") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
-        return ApiResponse.<Page<ProductResponse>>builder()
-                .result(productService.getAllProducts(pageable))
+    public ApiResponse<PagedResponse<ProductResponse>> getAll(Pageable pageable) {
+        var page = productService.getAllProducts(pageable);
+        return ApiResponse.<PagedResponse<ProductResponse>>builder()
+                .result(PagedResponse.fromPage(page))
                 .build();
     }
+
 
     @GetMapping("/{id}")
     public ApiResponse<ProductResponse> getById(@PathVariable Long id) {
