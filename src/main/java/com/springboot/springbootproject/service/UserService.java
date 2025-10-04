@@ -1,7 +1,9 @@
 package com.springboot.springbootproject.service;
 
 import java.util.List;
+import java.util.Set;
 
+import com.springboot.springbootproject.dto.request.RoleRequest;
 import com.springboot.springbootproject.dto.request.UserCreationRequest;
 import com.springboot.springbootproject.dto.request.UserUpdateRequest;
 import com.springboot.springbootproject.dto.response.UserResponse;
@@ -19,4 +21,6 @@ public interface UserService {
     List<UserResponse> getAllUsers();
 
     UserResponse getUser(String id);
+
+    UserResponse updateUserRole(String userId, RoleRequest request);
 }

@@ -2,8 +2,10 @@ package com.springboot.springbootproject.service.implement;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.springboot.springbootproject.dto.request.RoleRequest;
 import jakarta.transaction.Transactional;
 
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -87,6 +89,20 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse updateUserRole(String userId, RoleRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        Role role = roleRepository.findByName(request.getName())
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+        // ✅ Luôn dùng HashSet, không dùng Set.of()
+        user.setRoles(new HashSet<>(List.of(role)));
+
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")

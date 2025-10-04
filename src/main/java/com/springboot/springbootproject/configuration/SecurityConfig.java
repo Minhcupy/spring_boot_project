@@ -32,7 +32,7 @@ public class SecurityConfig {
         "/categories",
         "/products",
         "/products/search",
-        "/images/**"
+        "/images/**",
     };
 
     private final CustomJwtDecoder customJwtDecoder;

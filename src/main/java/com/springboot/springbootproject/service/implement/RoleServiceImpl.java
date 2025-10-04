@@ -2,7 +2,9 @@ package com.springboot.springbootproject.service.implement;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import com.springboot.springbootproject.entity.Permission;
 import jakarta.transaction.Transactional;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +44,19 @@ public class RoleServiceImpl implements RoleService {
         role = roleRepository.save(role);
         return roleMapper.toRoleResponse(role);
     }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+      public RoleResponse updateRolePermissions(String roleName, Set<String> permissions) {
+            var role = roleRepository.findById(roleName)
+                    .orElseThrow(() -> new RuntimeException("Role not found"));
+
+          Set<Permission> newPermissions = new HashSet<>(permissionRepository.findAllById(permissions));
+          role.setPermissions(newPermissions);
+
+            role = roleRepository.save(role);
+            return roleMapper.toRoleResponse(role);
+        }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
