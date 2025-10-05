@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class ProductResponse {
     Long id;
     String name;
-    String categoryName;
+    Long categoryId;
     Integer quantity;
     BigDecimal price;
     String description;

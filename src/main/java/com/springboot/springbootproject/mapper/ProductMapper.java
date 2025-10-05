@@ -11,7 +11,7 @@ import com.springboot.springbootproject.entity.Product;
 public interface ProductMapper {
     Product toProduct(ProductCreationRequest request);
 
-    @Mapping(source = "category.name", target = "categoryName")
+    @Mapping(source = "category.id", target = "categoryId")
     ProductResponse toProductResponse(Product product);
 
     void updateProduct(@MappingTarget Product product, ProductUpdateRequest request);
