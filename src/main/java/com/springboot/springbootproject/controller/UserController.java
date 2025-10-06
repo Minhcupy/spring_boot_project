@@ -1,7 +1,9 @@
 package com.springboot.springbootproject.controller;
 
 import java.util.List;
+import java.util.Set;
 
+import com.springboot.springbootproject.dto.request.RoleRequest;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +52,16 @@ public class UserController {
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getMyInfo())
+                .build();
+    }
+
+    @PutMapping("/{userId}/roles")
+    public ApiResponse<UserResponse> updateUserRole(
+            @PathVariable String userId,
+            @RequestBody RoleRequest roleRequest
+    ) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateUserRole(userId, roleRequest))
                 .build();
     }
 

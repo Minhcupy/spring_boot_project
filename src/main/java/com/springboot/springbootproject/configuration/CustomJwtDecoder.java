@@ -33,7 +33,6 @@ public class CustomJwtDecoder implements JwtDecoder {
         try {
             var response = authenticationService.introspect(
                     IntrospectRequest.builder().token(token).build());
-
             if (!response.isValid()) {
                 throw new JwtException("Token is invalid");
             }
