@@ -14,7 +14,7 @@ import com.springboot.springbootproject.entity.Category;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query(value = "SELECT EXISTS (SELECT 1 FROM categories WHERE name = :name)", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM categories WHERE LOWER(name) = LOWER(:name)", nativeQuery = true)
     Long existsByNameNative(@Param("name") String name);
 
     @Query(value = "SELECT * FROM categories c WHERE c.id = :id", nativeQuery = true)

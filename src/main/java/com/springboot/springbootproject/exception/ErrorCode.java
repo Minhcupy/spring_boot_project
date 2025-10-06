@@ -18,6 +18,7 @@ public enum ErrorCode {
     INVALID_DOB(1008, "Your age be at least {min}", HttpStatus.BAD_REQUEST),
     ROLE_NOT_FOUND(1009, "Role Not Found", HttpStatus.NOT_FOUND),
     CATEGORY_EXISTED(2001, "Category Existed", HttpStatus.BAD_REQUEST),
+    PRODUCT_EXISTED(3001, "Product Existed", HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

@@ -32,8 +32,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse createCategory(CategoryRequest request) {
-        boolean exists = categoryRepository.existsByNameNative(request.getName()) == 1L;
-        if (exists) {
+        Long count = categoryRepository.existsByNameNative(request.getName());
+        if (count != null && count > 0) {
             throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
 
@@ -44,7 +44,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATEGORY_EXISTED));
+
+        Long count = categoryRepository.existsByNameNative(request.getName());
+        if (count != null && count > 0 && !category.getName().equalsIgnoreCase(request.getName())) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
+        }
 
         categoryMapper.updateCategory(category, request);
         return categoryMapper.toCategoryResponse(categoryRepository.save(category));
