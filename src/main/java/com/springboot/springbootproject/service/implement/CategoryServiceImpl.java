@@ -32,8 +32,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse createCategory(CategoryRequest request) {
-        if (categoryRepository.existsByName(request.getName())) {
-            throw new AppException(ErrorCode.INVALID_KEY);
+        boolean exists = categoryRepository.existsByNameNative(request.getName()) == 1L;
+        if (exists) {
+            throw new AppException(ErrorCode.CATEGORY_EXISTED);
         }
 
         Category category = categoryMapper.toCategory(request);
