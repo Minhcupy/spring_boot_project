@@ -16,6 +16,9 @@ public interface RoleRepository extends JpaRepository<Role, String> {
     @Query(value = "SELECT * FROM role", nativeQuery = true)
     List<Role> findAll();
 
+    @Query(value = "SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END FROM role WHERE name = :name", nativeQuery = true)
+    boolean existsById(@Param("name") String name);
+
     @Query(value = "SELECT * FROM role r WHERE r.name = :name LIMIT 1", nativeQuery = true)
     Optional<Role> findByName(@Param("name") String name);
 

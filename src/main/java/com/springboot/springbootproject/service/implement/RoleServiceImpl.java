@@ -36,6 +36,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public RoleResponse create(RoleRequest request) {
+        if (roleRepository.existsById(request.getName())) {
+            throw new RuntimeException("Role already exists");
+        }
         var role = roleMapper.toRole(request);
 
         var permissions = permissionRepository.findAllById(request.getPermissions());
@@ -45,18 +48,18 @@ public class RoleServiceImpl implements RoleService {
         return roleMapper.toRoleResponse(role);
     }
 
-    @Override
-    @PreAuthorize("hasRole('ADMIN')")
-      public RoleResponse updateRolePermissions(String roleName, Set<String> permissions) {
-            var role = roleRepository.findById(roleName)
-                    .orElseThrow(() -> new RuntimeException("Role not found"));
-
-          Set<Permission> newPermissions = new HashSet<>(permissionRepository.findAllById(permissions));
-          role.setPermissions(newPermissions);
-
-            role = roleRepository.save(role);
-            return roleMapper.toRoleResponse(role);
-        }
+//    @Override
+//    @PreAuthorize("hasRole('ADMIN')")
+//      public RoleResponse updateRolePermissions(String roleName, Set<String> permissions) {
+//            var role = roleRepository.findByName(roleName)
+//                    .orElseThrow(() -> new RuntimeException("Role not found"));
+//
+//          Set<Permission> newPermissions = new HashSet<>(permissionRepository.findAllById(permissions));
+//          role.setPermissions(newPermissions);
+//
+//            role = roleRepository.save(role);
+//            return roleMapper.toRoleResponse(role);
+//        }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")

@@ -29,6 +29,10 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'net.sf.jasperreports:jasperreports:6.9.0'
 
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+
     implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'

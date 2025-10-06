@@ -11,7 +11,7 @@ public interface RoleService {
 
     List<RoleResponse> getAll();
 
-    RoleResponse updateRolePermissions(String roleName, Set<String> permissions);
+//    RoleResponse updateRolePermissions(String roleName, Set<String> permissions);
 
     void delete(String role);
 }

@@ -2,13 +2,12 @@ package com.springboot.springbootproject.service.implement;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.springboot.springbootproject.dto.request.RoleRequest;
 import jakarta.transaction.Transactional;
 
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -98,7 +97,6 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.findByName(request.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
-        // ✅ Luôn dùng HashSet, không dùng Set.of()
         user.setRoles(new HashSet<>(List.of(role)));
 
         return userMapper.toUserResponse(userRepository.save(user));
@@ -111,8 +109,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+//    @Cacheable("allUsers")
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
+//        System.out.println("Query db ....");
         log.info("In method get Users");
         return userRepository.findAll().stream().map(userMapper::toUserResponse).collect(Collectors.toList());
     }

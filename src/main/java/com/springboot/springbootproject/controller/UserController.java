@@ -6,6 +6,7 @@ import java.util.Set;
 import com.springboot.springbootproject.dto.request.RoleRequest;
 import jakarta.validation.Valid;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
 import com.springboot.springbootproject.dto.request.UserCreationRequest;
@@ -28,7 +29,8 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
+//    @CacheEvict(value = "allUsers", allEntries = true)
+    public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(request))
                 .build();
