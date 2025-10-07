@@ -19,10 +19,10 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "role")
 public class Role {
     @Id
-    @NotBlank(message = "Role name is required")
+    @Column(name = "name")
     String name;
 
-    @Size(max = 255, message = "Description must not exceed 255 characters")
+    @Column(name = "description", length = 200)
     String description;
 
     @ManyToMany(fetch = FetchType.EAGER)

@@ -24,12 +24,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @NotBlank(message = "Category name is required")
-    @Size(min = 2, max = 100, message = "Category name must be between 2 and 100 characters")
     @Column(nullable = false, unique = true, length = 100)
     String name;
 
-    @Size(max = 500, message = "Description must not exceed 500 characters")
+    @Column(name = "description", length = 200)
     String description;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)

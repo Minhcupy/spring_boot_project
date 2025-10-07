@@ -19,7 +19,6 @@ import lombok.experimental.FieldDefaults;
 @Entity
 public class InvalidatedToken {
     @Id
-    @NotBlank(message = "Token ID is required")
     @Column(nullable = false, unique = true, length = 500)
     String id;
 
