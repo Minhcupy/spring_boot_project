@@ -5,10 +5,7 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -32,6 +29,11 @@ public class User {
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     String password;
+
+//    @Email(message = "Invalid email format")
+//    @NotBlank(message = "Email is required")
+//    @Column(name = "email", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+//    String email;
 
     @Column(nullable = true)
     @Size(max = 100, message = "First name must be less than 100 characters")

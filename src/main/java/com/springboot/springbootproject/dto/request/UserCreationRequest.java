@@ -2,6 +2,8 @@ package com.springboot.springbootproject.dto.request;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import com.springboot.springbootproject.validator.DobConstraint;
@@ -20,6 +22,10 @@ public class UserCreationRequest {
 
     @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
+
+//    @NotBlank(message = "EMAIL_REQUIRED")
+//    @Email(message = "INVALID_EMAIL_FORMAT")
+//    String email;
 
     String firstName;
     String lastName;
