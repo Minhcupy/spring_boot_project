@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.springboot.springbootproject.dto.request.ProductCreationRequest;
+import com.springboot.springbootproject.dto.request.ProductUpdateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,82 +41,91 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public ProductResponse createProduct(
-            String name, Long categoryId, Integer quantity, BigDecimal price, String description, MultipartFile image) {
-        Category category =
-                categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+    public ProductResponse createProduct(ProductCreationRequest request) {
 
-        String imageUrl = saveImage(image);
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+
+        String imageUrl = saveImage(request.getImage());
 
         Product product = Product.builder()
-                .name(name)
+                .name(request.getName())
                 .category(category)
-                .quantity(quantity)
-                .price(price)
-                .description(description)
+                .quantity(request.getQuantity())
+                .price(request.getPrice())
+                .description(request.getDescription())
                 .imageUrl(imageUrl)
                 .build();
 
-        return productMapper.toProductResponse(productRepository.save(product));
+        Product saved = productRepository.save(product);
+        return productMapper.toProductResponse(saved);
     }
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public ProductResponse updateProduct(
-            Long id,
-            String name,
-            Long categoryId,
-            Integer quantity,
-            BigDecimal price,
-            String description,
-            MultipartFile image) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+    public ProductResponse updateProduct(Long id, ProductUpdateRequest request) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
-        if (categoryId != null) {
-            Category category =
-                    categoryRepository.findById(categoryId).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        if (request.getCategoryId() != null) {
+            Category category = categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
             product.setCategory(category);
         }
 
-        if (name != null) product.setName(name);
-        if (quantity != null) product.setQuantity(quantity);
-        if (price != null) product.setPrice(price);
-        if (description != null) product.setDescription(description);
+        if (request.getName() != null && !request.getName().isBlank()) {
+            product.setName(request.getName());
+        }
+        if (request.getQuantity() != null) {
+            product.setQuantity(request.getQuantity());
+        }
+        if (request.getPrice() != null) {
+            product.setPrice(request.getPrice());
+        }
+        if (request.getDescription() != null) {
+            product.setDescription(request.getDescription());
+        }
 
+        // ✅ Xử lý file ảnh (nếu có upload mới)
+        MultipartFile image = request.getImage();
         if (image != null && !image.isEmpty()) {
             product.setImageUrl(saveImage(image));
         }
 
-        return productMapper.toProductResponse(productRepository.save(product));
+        Product updated = productRepository.save(product);
+        return productMapper.toProductResponse(updated);
     }
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new AppException(ErrorCode.INVALID_KEY);
+        }
         productRepository.deleteById(id);
     }
 
     @Override
     public ProductResponse getProduct(Long id) {
-        return productMapper.toProductResponse(
-                productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY)));
+        return productRepository.findByIdCustom(id)
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
     }
 
     @Override
     public List<ProductResponse> searchProducts(String keyword) {
-        return productRepository.findByNameContainingIgnoreCase(keyword).stream()
-                .map(productMapper::toProductResponse)
-                .collect(Collectors.toList());
+        return productRepository.findByNameContainingIgnoreCase(keyword);
     }
 
     @Override
     public Page<ProductResponse> getAllProducts(Pageable pageable) {
-        return productRepository.findAll(pageable).map(productMapper::toProductResponse);
+        return productRepository.findAllCustom(pageable);
     }
 
     @Override
     public Page<ProductResponse> getProductsByCategory(Long categoryId, Pageable pageable) {
-        return productRepository.findByCategoryId(categoryId, pageable).map(productMapper::toProductResponse);
+        return productRepository.findByCategoryId(categoryId, pageable);
     }
 
     private String saveImage(MultipartFile image) {

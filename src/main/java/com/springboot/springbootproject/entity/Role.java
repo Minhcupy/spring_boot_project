@@ -16,6 +16,16 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SqlResultSetMapping(
+        name = "RoleResponseMapping",
+        classes = @ConstructorResult(
+                targetClass = com.springboot.springbootproject.dto.response.RoleResponse.class,
+                columns = {
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "description", type = String.class)
+                }
+        )
+)
 @Table(name = "role")
 public class Role {
     @Id

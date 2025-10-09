@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Builder
@@ -15,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 public class ProductCreationRequest {
 
     @NotBlank(message = "PRODUCT_NAME_REQUIRED")
+    @Size(min = 2, max = 5, message = "Product name must be between 2 and 100 characters")
     String name;
 
     @NotNull(message = "CATEGORY_ID_REQUIRED")
@@ -29,9 +31,9 @@ public class ProductCreationRequest {
     @Digits(integer = 12, fraction = 2, message = "Price format is invalid")
     BigDecimal price;
 
+    @Size(max = 500, message = "Description must not exceed 500 characters")
     String description;
 
     // ⚡ Thêm ảnh sản phẩm
-    @NotBlank(message = "PRODUCT_IMAGE_REQUIRED")
-    String imageUrl;
+    MultipartFile image;
 }

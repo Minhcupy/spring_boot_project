@@ -12,4 +12,6 @@ public class CategoryResponse {
     Long id;
     String name;
     String description;
+    Long productCount;
+
 }

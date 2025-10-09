@@ -3,7 +3,10 @@ package com.springboot.springbootproject.controller;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.springboot.springbootproject.dto.request.ProductCreationRequest;
+import com.springboot.springbootproject.dto.request.ProductUpdateRequest;
 import com.springboot.springbootproject.dto.response.PagedResponse;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,17 +31,12 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<ProductResponse> create(
-            @RequestParam String name,
-            @RequestParam Long categoryId,
-            @RequestParam Integer quantity,
-            @RequestParam BigDecimal price,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false, name = "image") MultipartFile image) {
+    public ApiResponse<ProductResponse> create(@Valid @ModelAttribute ProductCreationRequest request) {
         return ApiResponse.<ProductResponse>builder()
-                .result(productService.createProduct(name, categoryId, quantity, price, description, image))
+                .result(productService.createProduct(request))
                 .build();
     }
+
 
     @GetMapping
     public ApiResponse<PagedResponse<ProductResponse>> getAll(Pageable pageable) {
@@ -59,16 +57,13 @@ public class ProductController {
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<ProductResponse> update(
             @PathVariable Long id,
-            @RequestParam String name,
-            @RequestParam Long categoryId,
-            @RequestParam Integer quantity,
-            @RequestParam BigDecimal price,
-            @RequestParam(required = false) String description,
-            @RequestParam(required = false, name = "image") MultipartFile image) {
+            @Valid @ModelAttribute ProductUpdateRequest request) {
+
         return ApiResponse.<ProductResponse>builder()
-                .result(productService.updateProduct(id, name, categoryId, quantity, price, description, image))
+                .result(productService.updateProduct(id, request))
                 .build();
     }
+
 
     @DeleteMapping("/{id}")
     public ApiResponse<String> delete(@PathVariable Long id) {

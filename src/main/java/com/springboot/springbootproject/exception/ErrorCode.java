@@ -18,7 +18,13 @@ public enum ErrorCode {
     INVALID_DOB(1008, "Your age be at least {min}", HttpStatus.BAD_REQUEST),
     ROLE_NOT_FOUND(1009, "Role Not Found", HttpStatus.NOT_FOUND),
     CATEGORY_EXISTED(2001, "Category Existed", HttpStatus.BAD_REQUEST),
-    PRODUCT_EXISTED(3001, "Product Existed", HttpStatus.BAD_REQUEST)
+    PRODUCT_EXISTED(3001, "Product Existed", HttpStatus.BAD_REQUEST),
+    PRODUCT_NAME_REQUIRED(3002, "Product name is required", HttpStatus.BAD_REQUEST),
+    PRODUCT_NAME_INVALID(3003, "Product name must be between 2 and 100 characters", HttpStatus.BAD_REQUEST),
+    INVALID_QUANTITY(3004, "Quantity must be at least 1", HttpStatus.BAD_REQUEST),
+    INVALID_PRICE(3005, "Price must be at least 1000", HttpStatus.BAD_REQUEST),
+    DESCRIPTION_TOO_LONG(3006, "Description must not exceed 500 characters", HttpStatus.BAD_REQUEST),
+    CATEGORY_HAS_PRODUCTS(4001, "Category has products, cannot delete", HttpStatus.CONFLICT),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

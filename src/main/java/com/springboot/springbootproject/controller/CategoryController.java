@@ -2,6 +2,7 @@ package com.springboot.springbootproject.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,7 @@ public class CategoryController {
     CategoryService categoryService;
 
     @PostMapping
-    ApiResponse<CategoryResponse> create(@RequestBody CategoryRequest request) {
+    ApiResponse<CategoryResponse> create(@Valid @RequestBody CategoryRequest request) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.createCategory(request))
                 .build();
@@ -52,7 +53,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    ApiResponse<CategoryResponse> update(@PathVariable Long id, @RequestBody CategoryRequest request) {
+    ApiResponse<CategoryResponse> update(@PathVariable Long id,@Valid @RequestBody CategoryRequest request) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.updateCategory(id, request))
                 .build();

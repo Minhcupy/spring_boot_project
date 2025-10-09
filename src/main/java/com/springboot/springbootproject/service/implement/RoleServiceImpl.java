@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.springboot.springbootproject.entity.Permission;
+import com.springboot.springbootproject.entity.Role;
 import jakarta.transaction.Transactional;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,40 +37,47 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public RoleResponse create(RoleRequest request) {
-        if (roleRepository.existsById(request.getName())) {
+        if (roleRepository.existsByName(request.getName())) {
             throw new RuntimeException("Role already exists");
         }
-        var role = roleMapper.toRole(request);
+
+        Role role = roleMapper.toRole(request);
 
         var permissions = permissionRepository.findAllById(request.getPermissions());
         role.setPermissions(new HashSet<>(permissions));
 
-        role = roleRepository.save(role);
-        return roleMapper.toRoleResponse(role);
+        Role saved = roleRepository.save(role);
+        return roleMapper.toRoleResponse(saved);
     }
 
-//    @Override
 //    @PreAuthorize("hasRole('ADMIN')")
-//      public RoleResponse updateRolePermissions(String roleName, Set<String> permissions) {
-//            var role = roleRepository.findByName(roleName)
-//                    .orElseThrow(() -> new RuntimeException("Role not found"));
+//    public RoleResponse updateRolePermissions(String roleName, Set<String> permissionIds) {
+//        var role = roleRepository.findByName(roleName)
+//                .orElseThrow(() -> new RuntimeException("Role not found"));
 //
-//          Set<Permission> newPermissions = new HashSet<>(permissionRepository.findAllById(permissions));
-//          role.setPermissions(newPermissions);
+//        // Lấy entity role gốc để cập nhật permissions
+//        Role existingRole = new Role();
+//        existingRole.setName(role.getName());
+//        existingRole.setDescription(role.getDescription());
 //
-//            role = roleRepository.save(role);
-//            return roleMapper.toRoleResponse(role);
-//        }
+//        Set<Permission> newPermissions = new HashSet<>(permissionRepository.findAllById(permissionIds));
+//        existingRole.setPermissions(newPermissions);
+//
+//        existingRole = roleRepository.save(existingRole);
+//        return roleMapper.toRoleResponse(existingRole);
+//    }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public List<RoleResponse> getAll() {
-        return roleRepository.findAll().stream().map(roleMapper::toRoleResponse).toList();
+        log.info("Fetching all roles using EntityManager query");
+        return roleRepository.findAllCustom();
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public void delete(String role) {
-        roleRepository.deleteById(role);
+    public void delete(String roleId) {
+        log.info("Deleting role with id: {}", roleId);
+        roleRepository.deleteByIdCustom(roleId);
     }
 }

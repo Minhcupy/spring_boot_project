@@ -3,6 +3,7 @@ package com.springboot.springbootproject.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.springboot.springbootproject.dto.response.ProductResponse;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.*;
@@ -16,6 +17,22 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SqlResultSetMapping(
+        name = "ProductResponseMapping",
+        classes = @ConstructorResult(
+                targetClass = ProductResponse.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "category_id", type = Long.class),
+                        @ColumnResult(name = "category_name", type = String.class),
+                        @ColumnResult(name = "quantity", type = Integer.class),
+                        @ColumnResult(name = "price", type = java.math.BigDecimal.class),
+                        @ColumnResult(name = "description", type = String.class),
+                        @ColumnResult(name = "image_url", type = String.class)
+                }
+        )
+)
 @Table(
         name = "product",
         indexes = {

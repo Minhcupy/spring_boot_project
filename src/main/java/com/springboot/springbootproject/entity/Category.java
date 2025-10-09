@@ -16,6 +16,18 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SqlResultSetMapping(
+        name = "CategoryResponseMapping",
+        classes = @ConstructorResult(
+                targetClass = com.springboot.springbootproject.dto.response.CategoryResponse.class,
+                columns = {
+                        @ColumnResult(name = "id", type = Long.class),
+                        @ColumnResult(name = "name", type = String.class),
+                        @ColumnResult(name = "description", type = String.class),
+                        @ColumnResult(name = "product_count", type = Long.class)
+                }
+        )
+)
 @Table(name = "categories", indexes = {
         @Index(name = "idx_category_name", columnList = "name")
 })

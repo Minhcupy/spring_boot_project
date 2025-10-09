@@ -33,19 +33,21 @@ public class PermissionServiceImpl implements PermissionService {
     @PreAuthorize("hasRole('ADMIN')")
     public PermissionResponse create(PermissionRequest request) {
         Permission permission = permissionMapper.toPermission(request);
-        permission = permissionRepository.save(permission);
-        return permissionMapper.toPermissionResponse(permission);
-    }
-
-    @Override
-    public List<PermissionResponse> getAll() {
-        var permissions = permissionRepository.findAll();
-        return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
+        Permission saved = permissionRepository.save(permission);
+        return permissionMapper.toPermissionResponse(saved);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public void delete(String permission) {
-        permissionRepository.deleteById(permission);
+    public List<PermissionResponse> getAll() {
+        log.info("Fetching all permissions using EntityManager query");
+        return permissionRepository.findAllCustom();
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMIN')")
+    public void delete(String permissionId) {
+        log.info("Deleting permission with id: {}", permissionId);
+        permissionRepository.deleteById(permissionId);
     }
 }

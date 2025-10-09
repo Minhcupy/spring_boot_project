@@ -76,8 +76,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         log.info("SignKey {}", SIGNER_KEY);
 
+        // ✅ lấy entity gốc, không phải DTO
         var user = userRepository
-                .findByUsername(request.getUsername())
+                .findEntityByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
@@ -97,6 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
+
     @Override
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         try {
@@ -115,12 +117,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
-        var signedJWT = verifyToken(request.getToken(), true);
+    public AuthenticationResponse refreshToken(RefreshRequest request)
+            throws ParseException, JOSEException {
 
+        var signedJWT = verifyToken(request.getToken(), true);
         var username = signedJWT.getJWTClaimsSet().getSubject();
-        var user =
-                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+
+        var user = userRepository.findEntityByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
         var newAccessToken = generateToken(user, VALID_DURATION);
 
@@ -130,6 +134,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .authenticated(true)
                 .build();
     }
+
 
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes(StandardCharsets.UTF_8));

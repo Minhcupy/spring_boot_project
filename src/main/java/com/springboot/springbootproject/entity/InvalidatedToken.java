@@ -17,6 +17,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@SqlResultSetMapping(
+        name = "InvalidatedTokenMapping",
+        entities = @EntityResult(entityClass = com.springboot.springbootproject.entity.InvalidatedToken.class)
+)
 public class InvalidatedToken {
     @Id
     @Column(nullable = false, unique = true, length = 500)

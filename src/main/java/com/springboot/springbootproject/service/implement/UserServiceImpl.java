@@ -45,30 +45,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse createUser(UserCreationRequest request) {
+        // ✅ 1. Kiểm tra username đã tồn tại
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
 
+        // ✅ 2. Chuyển DTO -> Entity và mã hoá mật khẩu
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<Role> roles = new HashSet<>();
-        roleRepository.findByName(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+        // ✅ 3. Lấy role mặc định (USER)
+        Role defaultRole = roleRepository.findEntityByName(PredefinedRole.USER_ROLE)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
-        user.setRoles(roles);
+        user.setRoles(new HashSet<>(List.of(defaultRole)));
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        // ✅ 4. Lưu user mới và map lại sang DTO
+        User savedUser = userRepository.save(user);
+        return userMapper.toUserResponse(savedUser);
     }
 
 
     @Override
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
-        String name = context.getAuthentication().getName();
+        String username = context.getAuthentication().getName();
 
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        return userMapper.toUserResponse(user);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 
     @Override
@@ -78,29 +82,34 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(user, request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
 
         if (request.getRoles() != null && !request.getRoles().isEmpty()) {
             var roles = roleRepository.findAllById(request.getRoles());
             user.setRoles(new HashSet<>(roles));
         }
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        User updated = userRepository.save(user);
+        return userMapper.toUserResponse(updated);
     }
-
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUserRole(String userId, RoleRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        Role role = roleRepository.findByName(request.getName())
+        // ⬇️ Dùng hàm trả về Role (entity), KHÔNG dùng findByName() trả về RoleResponse
+        Role role = roleRepository.findEntityByName(request.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
-        user.setRoles(new HashSet<>(List.of(role)));
-
-        return userMapper.toUserResponse(userRepository.save(user));
+        user.setRoles(new HashSet<>(java.util.Collections.singleton(role)));
+        User updated = userRepository.save(user);
+        return userMapper.toUserResponse(updated);
     }
+
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -109,19 +118,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-//    @Cacheable("allUsers")
     @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
-//        System.out.println("Query db ....");
-        log.info("In method get Users");
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).collect(Collectors.toList());
+        log.info("Fetching all users via EntityManager");
+        return userRepository.findAllCustom();
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getUser(String id) {
-        log.info("In method get User by id");
-        return userMapper.toUserResponse(
-                userRepository.findById(id).orElseThrow(() -> new RuntimeException("User Not Found")));
+        log.info("Fetching user by ID via EntityManager");
+        return userRepository.findByIdCustom(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 }

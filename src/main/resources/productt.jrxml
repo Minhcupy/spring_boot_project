@@ -99,8 +99,12 @@
                 <reportElement x="0" y="0" width="111" height="20" uuid="0bcbdc26-b1be-414e-a675-abb2260834ac">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9f439a2c-f928-4f39-9f1c-10d4ac44ad31"/>
                 </reportElement>
-                <textElement>
-                    <font size="14"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="DejaVu Sans"
+                          pdfFontName="fonts/DejaVuSans.ttf"
+                          pdfEncoding="Identity-H"
+                          isPdfEmbedded="true"
+                          size="10"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
             </textField>
@@ -108,8 +112,12 @@
                 <reportElement x="111" y="0" width="111" height="20" uuid="f8bd3e29-1dd1-43a6-8224-e302c5b97dcc">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="206a6ad5-7089-44ef-ad58-1ff8d3a23e84"/>
                 </reportElement>
-                <textElement>
-                    <font size="14"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="DejaVu Sans"
+                          pdfFontName="fonts/DejaVuSans.ttf"
+                          pdfEncoding="Identity-H"
+                          isPdfEmbedded="true"
+                          size="10"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
             </textField>
@@ -117,17 +125,25 @@
                 <reportElement x="222" y="0" width="111" height="20" uuid="5534c383-7d30-47ce-bd7f-93348587599a">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e822bc0a-8b85-442c-9d11-ca5204df02fd"/>
                 </reportElement>
-                <textElement>
-                    <font size="14"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="DejaVu Sans"
+                          pdfFontName="fonts/DejaVuSans.ttf"
+                          pdfEncoding="Identity-H"
+                          isPdfEmbedded="true"
+                          size="10"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
             </textField>
-            <textField isStretchWithOverflow="true">
+            <textField isStretchWithOverflow="true" pattern="#,##0">
                 <reportElement x="333" y="0" width="111" height="20" uuid="4ebbba0d-ac19-4105-8989-f6a93f694d45">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="da66335f-7038-409d-adfe-30d6f68c8532"/>
                 </reportElement>
-                <textElement>
-                    <font size="14"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="DejaVu Sans"
+                          pdfFontName="fonts/DejaVuSans.ttf"
+                          pdfEncoding="Identity-H"
+                          isPdfEmbedded="true"
+                          size="10"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
             </textField>
@@ -135,8 +151,12 @@
                 <reportElement x="444" y="0" width="111" height="20" uuid="f5706a53-d773-4677-8bd9-90b06e3b392c">
                     <property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2a906e45-63b5-49ca-933b-fe71f297676e"/>
                 </reportElement>
-                <textElement>
-                    <font size="14"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                <font fontName="DejaVu Sans"
+                          pdfFontName="fonts/DejaVuSans.ttf"
+                          pdfEncoding="Identity-H"
+                          isPdfEmbedded="true"
+                          size="10"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
             </textField>

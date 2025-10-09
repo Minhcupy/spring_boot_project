@@ -3,6 +3,8 @@ package com.springboot.springbootproject.service;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.springboot.springbootproject.dto.request.ProductCreationRequest;
+import com.springboot.springbootproject.dto.request.ProductUpdateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,17 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.springboot.springbootproject.dto.response.ProductResponse;
 
 public interface ProductService {
-    ProductResponse createProduct(
-            String name, Long categoryId, Integer quantity, BigDecimal price, String description, MultipartFile image);
+    public ProductResponse createProduct(ProductCreationRequest request);
 
-    ProductResponse updateProduct(
-            Long id,
-            String name,
-            Long categoryId,
-            Integer quantity,
-            BigDecimal price,
-            String description,
-            MultipartFile image);
+    public ProductResponse updateProduct(Long id, ProductUpdateRequest request);
 
     void deleteProduct(Long id);
 
