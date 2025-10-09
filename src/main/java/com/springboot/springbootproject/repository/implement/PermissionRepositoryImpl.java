@@ -1,15 +1,17 @@
 package com.springboot.springbootproject.repository.implement;
 
-import com.springboot.springbootproject.dto.response.PermissionResponse;
-import com.springboot.springbootproject.entity.Permission;
-import com.springboot.springbootproject.repository.PermissionRepositoryCustom;
+import java.util.List;
+import java.util.Optional;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.springboot.springbootproject.dto.response.PermissionResponse;
+import com.springboot.springbootproject.entity.Permission;
+import com.springboot.springbootproject.repository.PermissionRepositoryCustom;
 
 @Repository
 @Transactional(readOnly = true)
@@ -21,27 +23,25 @@ public class PermissionRepositoryImpl implements PermissionRepositoryCustom {
     @Override
     public List<PermissionResponse> findAllCustom() {
         String sql = """
-            SELECT 
-                p.name,
-                p.description
-            FROM permission p
-            ORDER BY p.name ASC
-        """;
+			SELECT
+				p.name,
+				p.description
+			FROM permission p
+			ORDER BY p.name ASC
+		""";
 
-        return entityManager
-                .createNativeQuery(sql, "PermissionResponseMapping")
-                .getResultList();
+        return entityManager.createNativeQuery(sql, "PermissionResponseMapping").getResultList();
     }
 
     @Override
     public Optional<PermissionResponse> findByIdCustom(String name) {
         String sql = """
-            SELECT 
-                p.name,
-                p.description
-            FROM permission p
-            WHERE p.name = ?1
-        """;
+			SELECT
+				p.name,
+				p.description
+			FROM permission p
+			WHERE p.name = ?1
+		""";
 
         List<PermissionResponse> result = entityManager
                 .createNativeQuery(sql, "PermissionResponseMapping")
@@ -55,9 +55,7 @@ public class PermissionRepositoryImpl implements PermissionRepositoryCustom {
     @Transactional
     public void deleteByName(String name) {
         String sql = "DELETE FROM permission WHERE name = ?1";
-        entityManager.createNativeQuery(sql)
-                .setParameter(1, name)
-                .executeUpdate();
+        entityManager.createNativeQuery(sql).setParameter(1, name).executeUpdate();
     }
 
     @Override

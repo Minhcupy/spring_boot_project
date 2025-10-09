@@ -3,6 +3,7 @@ package com.springboot.springbootproject.controller;
 import java.util.List;
 
 import jakarta.validation.Valid;
+
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +39,7 @@ public class CategoryController {
 
     @GetMapping("/paging")
     ApiResponse<Page<CategoryResponse>> getPaged(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         return ApiResponse.<Page<CategoryResponse>>builder()
                 .result(categoryService.getCategories(page, size))
                 .build();
@@ -53,7 +53,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    ApiResponse<CategoryResponse> update(@PathVariable Long id,@Valid @RequestBody CategoryRequest request) {
+    ApiResponse<CategoryResponse> update(@PathVariable Long id, @Valid @RequestBody CategoryRequest request) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.updateCategory(id, request))
                 .build();

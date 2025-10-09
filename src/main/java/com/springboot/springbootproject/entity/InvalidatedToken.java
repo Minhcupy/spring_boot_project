@@ -3,10 +3,9 @@ package com.springboot.springbootproject.entity;
 import java.util.Date;
 
 import jakarta.persistence.*;
-
 import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,8 +18,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @SqlResultSetMapping(
         name = "InvalidatedTokenMapping",
-        entities = @EntityResult(entityClass = com.springboot.springbootproject.entity.InvalidatedToken.class)
-)
+        entities = @EntityResult(entityClass = com.springboot.springbootproject.entity.InvalidatedToken.class))
 public class InvalidatedToken {
     @Id
     @Column(nullable = false, unique = true, length = 500)

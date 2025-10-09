@@ -2,8 +2,6 @@ package com.springboot.springbootproject.entity;
 
 import jakarta.persistence.*;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,14 +14,13 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @SqlResultSetMapping(
         name = "PermissionResponseMapping",
-        classes = @ConstructorResult(
-                targetClass = com.springboot.springbootproject.dto.response.PermissionResponse.class,
-                columns = {
-                        @ColumnResult(name = "name", type = String.class),
-                        @ColumnResult(name = "description", type = String.class)
-                }
-        )
-)
+        classes =
+                @ConstructorResult(
+                        targetClass = com.springboot.springbootproject.dto.response.PermissionResponse.class,
+                        columns = {
+                            @ColumnResult(name = "name", type = String.class),
+                            @ColumnResult(name = "description", type = String.class)
+                        }))
 public class Permission {
     @Id
     @Column(unique = true, nullable = false, length = 100)

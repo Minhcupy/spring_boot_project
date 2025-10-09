@@ -1,14 +1,12 @@
 package com.springboot.springbootproject.controller;
 
 import java.util.List;
-import java.util.Set;
 
-import com.springboot.springbootproject.dto.request.RoleRequest;
 import jakarta.validation.Valid;
 
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 
+import com.springboot.springbootproject.dto.request.RoleRequest;
 import com.springboot.springbootproject.dto.request.UserCreationRequest;
 import com.springboot.springbootproject.dto.request.UserUpdateRequest;
 import com.springboot.springbootproject.dto.response.ApiResponse;
@@ -29,7 +27,7 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-//    @CacheEvict(value = "allUsers", allEntries = true)
+    //    @CacheEvict(value = "allUsers", allEntries = true)
     public ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(request))
@@ -58,17 +56,14 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/roles")
-    public ApiResponse<UserResponse> updateUserRole(
-            @PathVariable String userId,
-            @RequestBody RoleRequest roleRequest
-    ) {
+    public ApiResponse<UserResponse> updateUserRole(@PathVariable String userId, @RequestBody RoleRequest roleRequest) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUserRole(userId, roleRequest))
                 .build();
     }
 
     @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable String userId,@Valid @RequestBody UserUpdateRequest request) {
+    ApiResponse<UserResponse> updateUser(@PathVariable String userId, @Valid @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();

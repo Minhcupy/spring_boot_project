@@ -4,6 +4,7 @@ import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,5 +20,6 @@ public class RoleRequest {
 
     @Size(max = 255, message = "Description must not exceed 255 characters")
     String description;
+
     Set<String> permissions;
 }

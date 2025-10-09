@@ -2,18 +2,16 @@ package com.springboot.springbootproject.service.implement;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.springboot.springbootproject.dto.request.RoleRequest;
 import jakarta.transaction.Transactional;
 
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.springboot.springbootproject.constant.PredefinedRole;
+import com.springboot.springbootproject.dto.request.RoleRequest;
 import com.springboot.springbootproject.dto.request.UserCreationRequest;
 import com.springboot.springbootproject.dto.request.UserUpdateRequest;
 import com.springboot.springbootproject.dto.response.UserResponse;
@@ -55,7 +53,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         // ✅ 3. Lấy role mặc định (USER)
-        Role defaultRole = roleRepository.findEntityByName(PredefinedRole.USER_ROLE)
+        Role defaultRole = roleRepository
+                .findEntityByName(PredefinedRole.USER_ROLE)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
         user.setRoles(new HashSet<>(List.of(defaultRole)));
@@ -65,21 +64,18 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponse(savedUser);
     }
 
-
     @Override
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String username = context.getAuthentication().getName();
 
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 
     @Override
     @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.id")
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         userMapper.updateUser(user, request);
 
@@ -95,21 +91,21 @@ public class UserServiceImpl implements UserService {
         User updated = userRepository.save(user);
         return userMapper.toUserResponse(updated);
     }
+
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUserRole(String userId, RoleRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         // ⬇️ Dùng hàm trả về Role (entity), KHÔNG dùng findByName() trả về RoleResponse
-        Role role = roleRepository.findEntityByName(request.getName())
+        Role role = roleRepository
+                .findEntityByName(request.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
         user.setRoles(new HashSet<>(java.util.Collections.singleton(role)));
         User updated = userRepository.save(user);
         return userMapper.toUserResponse(updated);
     }
-
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")
@@ -128,7 +124,6 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getUser(String id) {
         log.info("Fetching user by ID via EntityManager");
-        return userRepository.findByIdCustom(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return userRepository.findByIdCustom(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 }

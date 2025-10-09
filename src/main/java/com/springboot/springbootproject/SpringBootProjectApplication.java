@@ -2,10 +2,9 @@ package com.springboot.springbootproject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
-//@EnableCaching
+// @EnableCaching
 public class SpringBootProjectApplication {
 
     public static void main(String[] args) {

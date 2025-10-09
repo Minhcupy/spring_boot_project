@@ -1,9 +1,9 @@
 package com.springboot.springbootproject.repository;
 
-import com.springboot.springbootproject.entity.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.springboot.springbootproject.entity.Permission;
+
 @Repository
-public interface PermissionRepository extends JpaRepository<Permission, String>, PermissionRepositoryCustom {
-}
+public interface PermissionRepository extends JpaRepository<Permission, String>, PermissionRepositoryCustom {}

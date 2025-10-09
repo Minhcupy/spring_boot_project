@@ -3,6 +3,7 @@ package com.springboot.springbootproject.exception;
 import java.util.stream.Collectors;
 
 import jakarta.validation.ConstraintViolationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,7 +19,7 @@ import com.springboot.springbootproject.dto.response.ApiResponse;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-//    private static final String MIN_ATTRIBUTE = "min";
+    //    private static final String MIN_ATTRIBUTE = "min";
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(value = RuntimeException.class)
@@ -63,9 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse<String>> handleValidationException(MethodArgumentNotValidException e) {
         // Lấy toàn bộ lỗi field và gộp thành chuỗi dễ đọc
-        String message = e.getBindingResult()
-                .getFieldErrors()
-                .stream()
+        String message = e.getBindingResult().getFieldErrors().stream()
                 .map(fieldError -> formatValidationError(fieldError))
                 .collect(Collectors.joining("; "));
 
@@ -81,8 +80,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     ResponseEntity<ApiResponse<String>> handleConstraintViolation(ConstraintViolationException e) {
-        String message = e.getConstraintViolations()
-                .stream()
+        String message = e.getConstraintViolations().stream()
                 .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .collect(Collectors.joining("; "));
 
@@ -98,11 +96,9 @@ public class GlobalExceptionHandler {
 
     private String formatValidationError(FieldError fieldError) {
         return String.format(
-                "Field '%s' %s ",
-                fieldError.getField(),
-                fieldError.getDefaultMessage()
-//                Objects.toString(fieldError.getRejectedValue(), "null")
-        );
+                "Field '%s' %s ", fieldError.getField(), fieldError.getDefaultMessage()
+                //                Objects.toString(fieldError.getRejectedValue(), "null")
+                );
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

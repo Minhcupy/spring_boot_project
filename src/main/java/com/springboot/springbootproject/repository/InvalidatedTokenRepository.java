@@ -1,9 +1,10 @@
 package com.springboot.springbootproject.repository;
 
-import com.springboot.springbootproject.entity.InvalidatedToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.springboot.springbootproject.entity.InvalidatedToken;
+
 @Repository
-public interface InvalidatedTokenRepository extends JpaRepository<InvalidatedToken, String>, InvalidatedTokenRepositoryCustom {
-}
+public interface InvalidatedTokenRepository
+        extends JpaRepository<InvalidatedToken, String>, InvalidatedTokenRepositoryCustom {}

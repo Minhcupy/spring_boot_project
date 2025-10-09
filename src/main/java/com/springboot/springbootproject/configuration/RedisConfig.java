@@ -1,15 +1,15 @@
-//package com.springboot.springbootproject.configuration;
+// package com.springboot.springbootproject.configuration;
 //
 //
-//import org.springframework.cache.annotation.EnableCaching;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.data.redis.cache.RedisCacheConfiguration;
-//import org.springframework.data.redis.serializer.*;
+// import org.springframework.cache.annotation.EnableCaching;
+// import org.springframework.context.annotation.Bean;
+// import org.springframework.context.annotation.Configuration;
+// import org.springframework.data.redis.cache.RedisCacheConfiguration;
+// import org.springframework.data.redis.serializer.*;
 //
-//@Configuration
-//@EnableCaching
-//public class RedisConfig {
+// @Configuration
+// @EnableCaching
+// public class RedisConfig {
 //
 //    @Bean
 //    public RedisCacheConfiguration cacheConfiguration() {
@@ -20,4 +20,4 @@
 //                        )
 //                );
 //    }
-//}
+// }

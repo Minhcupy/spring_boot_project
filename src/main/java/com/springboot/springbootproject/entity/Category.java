@@ -3,8 +3,6 @@ package com.springboot.springbootproject.entity;
 import java.util.Set;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -18,19 +16,18 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @SqlResultSetMapping(
         name = "CategoryResponseMapping",
-        classes = @ConstructorResult(
-                targetClass = com.springboot.springbootproject.dto.response.CategoryResponse.class,
-                columns = {
-                        @ColumnResult(name = "id", type = Long.class),
-                        @ColumnResult(name = "name", type = String.class),
-                        @ColumnResult(name = "description", type = String.class),
-                        @ColumnResult(name = "product_count", type = Long.class)
-                }
-        )
-)
-@Table(name = "categories", indexes = {
-        @Index(name = "idx_category_name", columnList = "name")
-})
+        classes =
+                @ConstructorResult(
+                        targetClass = com.springboot.springbootproject.dto.response.CategoryResponse.class,
+                        columns = {
+                            @ColumnResult(name = "id", type = Long.class),
+                            @ColumnResult(name = "name", type = String.class),
+                            @ColumnResult(name = "description", type = String.class),
+                            @ColumnResult(name = "product_count", type = Long.class)
+                        }))
+@Table(
+        name = "categories",
+        indexes = {@Index(name = "idx_category_name", columnList = "name")})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

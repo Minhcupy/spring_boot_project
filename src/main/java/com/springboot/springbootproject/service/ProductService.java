@@ -1,14 +1,12 @@
 package com.springboot.springbootproject.service;
 
-import java.math.BigDecimal;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.springboot.springbootproject.dto.request.ProductCreationRequest;
 import com.springboot.springbootproject.dto.request.ProductUpdateRequest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.springboot.springbootproject.dto.response.ProductResponse;
 
 public interface ProductService {

@@ -1,9 +1,10 @@
 package com.springboot.springbootproject.dto.response;
 
-import lombok.*;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 
-import java.util.List;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -18,11 +19,6 @@ public class PagedResponse<T> {
 
     public static <T> PagedResponse<T> fromPage(Page<T> page) {
         return new PagedResponse<>(
-                page.getContent(),
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements(),
-                page.getTotalPages()
-        );
+                page.getContent(), page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
     }
 }

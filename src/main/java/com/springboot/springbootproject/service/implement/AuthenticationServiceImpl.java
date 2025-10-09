@@ -98,7 +98,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-
     @Override
     public void logout(LogoutRequest request) throws ParseException, JOSEException {
         try {
@@ -117,13 +116,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public AuthenticationResponse refreshToken(RefreshRequest request)
-            throws ParseException, JOSEException {
+    public AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException {
 
         var signedJWT = verifyToken(request.getToken(), true);
         var username = signedJWT.getJWTClaimsSet().getSubject();
 
-        var user = userRepository.findEntityByUsername(username)
+        var user = userRepository
+                .findEntityByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
         var newAccessToken = generateToken(user, VALID_DURATION);
@@ -135,7 +134,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes(StandardCharsets.UTF_8));
 
@@ -143,11 +141,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         Date expiryTime = (isRefresh)
                 ? new Date(signedJWT
-                .getJWTClaimsSet()
-                .getIssueTime()
-                .toInstant()
-                .plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS)
-                .toEpochMilli())
+                        .getJWTClaimsSet()
+                        .getIssueTime()
+                        .toInstant()
+                        .plus(REFRESHABLE_DURATION, ChronoUnit.SECONDS)
+                        .toEpochMilli())
                 : signedJWT.getJWTClaimsSet().getExpirationTime();
 
         var verified = signedJWT.verify(verifier);
@@ -156,13 +154,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-        if (invalidatedTokenRepository.existsByTokenId(signedJWT.getJWTClaimsSet().getJWTID())) {
+        if (invalidatedTokenRepository.existsByTokenId(
+                signedJWT.getJWTClaimsSet().getJWTID())) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
         return signedJWT;
     }
-
 
     private String generateToken(User user, long durationSeconds) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);

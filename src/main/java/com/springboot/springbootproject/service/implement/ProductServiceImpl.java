@@ -1,21 +1,19 @@
 package com.springboot.springbootproject.service.implement;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.springboot.springbootproject.dto.request.ProductCreationRequest;
-import com.springboot.springbootproject.dto.request.ProductUpdateRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.springboot.springbootproject.dto.request.ProductCreationRequest;
+import com.springboot.springbootproject.dto.request.ProductUpdateRequest;
 import com.springboot.springbootproject.dto.response.ProductResponse;
 import com.springboot.springbootproject.entity.Category;
 import com.springboot.springbootproject.entity.Product;
@@ -43,7 +41,8 @@ public class ProductServiceImpl implements ProductService {
     @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse createProduct(ProductCreationRequest request) {
 
-        Category category = categoryRepository.findById(request.getCategoryId())
+        Category category = categoryRepository
+                .findById(request.getCategoryId())
                 .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
         String imageUrl = saveImage(request.getImage());
@@ -61,15 +60,14 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(saved);
     }
 
-
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public ProductResponse updateProduct(Long id, ProductUpdateRequest request) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        Product product = productRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
         if (request.getCategoryId() != null) {
-            Category category = categoryRepository.findById(request.getCategoryId())
+            Category category = categoryRepository
+                    .findById(request.getCategoryId())
                     .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
             product.setCategory(category);
         }
@@ -97,7 +95,6 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toProductResponse(updated);
     }
 
-
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(Long id) {
@@ -109,8 +106,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductResponse getProduct(Long id) {
-        return productRepository.findByIdCustom(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        return productRepository.findByIdCustom(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
     }
 
     @Override

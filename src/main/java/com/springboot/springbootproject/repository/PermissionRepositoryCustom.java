@@ -1,10 +1,10 @@
 package com.springboot.springbootproject.repository;
 
-import com.springboot.springbootproject.dto.response.PermissionResponse;
-import com.springboot.springbootproject.entity.Permission;
-
 import java.util.List;
 import java.util.Optional;
+
+import com.springboot.springbootproject.dto.response.PermissionResponse;
+import com.springboot.springbootproject.entity.Permission;
 
 public interface PermissionRepositoryCustom {
 

@@ -13,5 +13,4 @@ public class CategoryResponse {
     String name;
     String description;
     Long productCount;
-
 }

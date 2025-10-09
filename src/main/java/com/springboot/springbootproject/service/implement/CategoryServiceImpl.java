@@ -1,9 +1,7 @@
 package com.springboot.springbootproject.service.implement;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.springboot.springbootproject.repository.ProductRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +14,7 @@ import com.springboot.springbootproject.exception.AppException;
 import com.springboot.springbootproject.exception.ErrorCode;
 import com.springboot.springbootproject.mapper.CategoryMapper;
 import com.springboot.springbootproject.repository.CategoryRepository;
+import com.springboot.springbootproject.repository.ProductRepository;
 import com.springboot.springbootproject.service.CategoryService;
 
 import lombok.AccessLevel;
@@ -47,8 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public CategoryResponse updateCategory(Long id, CategoryRequest request) {
-        Category existing = categoryRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        Category existing = categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
 
         Long count = categoryRepository.existsByName(request.getName());
         if (count != null && count > 0 && !existing.getName().equalsIgnoreCase(request.getName())) {
@@ -75,8 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryResponse getCategory(Long id) {
-        return categoryRepository.findByIdCustom(id)
-                .orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
+        return categoryRepository.findByIdCustom(id).orElseThrow(() -> new AppException(ErrorCode.INVALID_KEY));
     }
 
     @Override

@@ -1,14 +1,16 @@
 package com.springboot.springbootproject.repository.implement;
 
-import com.springboot.springbootproject.entity.InvalidatedToken;
-import com.springboot.springbootproject.repository.InvalidatedTokenRepositoryCustom;
+import java.util.List;
+import java.util.Optional;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import com.springboot.springbootproject.entity.InvalidatedToken;
+import com.springboot.springbootproject.repository.InvalidatedTokenRepositoryCustom;
 
 @Repository
 @Transactional(readOnly = true)
@@ -21,10 +23,9 @@ public class InvalidatedTokenRepositoryImpl implements InvalidatedTokenRepositor
     public boolean existsByTokenId(String id) {
         String sql = "SELECT COUNT(*) FROM invalidated_token WHERE id = ?1";
 
-        Long count = ((Number) entityManager
-                .createNativeQuery(sql)
-                .setParameter(1, id)
-                .getSingleResult()).longValue();
+        Long count = ((Number)
+                        entityManager.createNativeQuery(sql).setParameter(1, id).getSingleResult())
+                .longValue();
 
         return count > 0;
     }
@@ -44,13 +45,11 @@ public class InvalidatedTokenRepositoryImpl implements InvalidatedTokenRepositor
     @Override
     public List<InvalidatedToken> findAllCustom() {
         String sql = """
-            SELECT * 
-            FROM invalidated_token
-            ORDER BY expiry_time DESC
-        """;
+			SELECT *
+			FROM invalidated_token
+			ORDER BY expiry_time DESC
+		""";
 
-        return entityManager
-                .createNativeQuery(sql, InvalidatedToken.class)
-                .getResultList();
+        return entityManager.createNativeQuery(sql, InvalidatedToken.class).getResultList();
     }
 }

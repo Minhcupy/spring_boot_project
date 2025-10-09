@@ -3,12 +3,12 @@ package com.springboot.springbootproject.dto.request;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.springboot.springbootproject.validator.DobConstraint;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+
+import com.springboot.springbootproject.validator.DobConstraint;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

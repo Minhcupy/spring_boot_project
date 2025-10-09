@@ -5,10 +5,6 @@ import java.util.Set;
 
 import jakarta.persistence.*;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -21,20 +17,17 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @SqlResultSetMapping(
         name = "UserResponseMapping",
-        classes = @ConstructorResult(
-                targetClass = com.springboot.springbootproject.dto.response.UserResponse.class,
-                columns = {
-                        @ColumnResult(name = "id", type = String.class),
-                        @ColumnResult(name = "username", type = String.class),
-                        @ColumnResult(name = "first_name", type = String.class),
-                        @ColumnResult(name = "last_name", type = String.class),
-                        @ColumnResult(name = "dob", type = java.time.LocalDate.class),
-                        @ColumnResult(name = "role_name", type = String.class)
-                }
-        )
-)
-
-
+        classes =
+                @ConstructorResult(
+                        targetClass = com.springboot.springbootproject.dto.response.UserResponse.class,
+                        columns = {
+                            @ColumnResult(name = "id", type = String.class),
+                            @ColumnResult(name = "username", type = String.class),
+                            @ColumnResult(name = "first_name", type = String.class),
+                            @ColumnResult(name = "last_name", type = String.class),
+                            @ColumnResult(name = "dob", type = java.time.LocalDate.class),
+                            @ColumnResult(name = "role_name", type = String.class)
+                        }))
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

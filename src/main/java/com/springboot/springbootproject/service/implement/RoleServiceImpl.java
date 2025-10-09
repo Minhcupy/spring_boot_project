@@ -2,10 +2,7 @@ package com.springboot.springbootproject.service.implement;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import com.springboot.springbootproject.entity.Permission;
-import com.springboot.springbootproject.entity.Role;
 import jakarta.transaction.Transactional;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.springboot.springbootproject.dto.request.RoleRequest;
 import com.springboot.springbootproject.dto.response.RoleResponse;
+import com.springboot.springbootproject.entity.Role;
 import com.springboot.springbootproject.mapper.RoleMapper;
 import com.springboot.springbootproject.repository.PermissionRepository;
 import com.springboot.springbootproject.repository.RoleRepository;
@@ -50,22 +48,22 @@ public class RoleServiceImpl implements RoleService {
         return roleMapper.toRoleResponse(saved);
     }
 
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public RoleResponse updateRolePermissions(String roleName, Set<String> permissionIds) {
-//        var role = roleRepository.findByName(roleName)
-//                .orElseThrow(() -> new RuntimeException("Role not found"));
-//
-//        // Lấy entity role gốc để cập nhật permissions
-//        Role existingRole = new Role();
-//        existingRole.setName(role.getName());
-//        existingRole.setDescription(role.getDescription());
-//
-//        Set<Permission> newPermissions = new HashSet<>(permissionRepository.findAllById(permissionIds));
-//        existingRole.setPermissions(newPermissions);
-//
-//        existingRole = roleRepository.save(existingRole);
-//        return roleMapper.toRoleResponse(existingRole);
-//    }
+    //    @PreAuthorize("hasRole('ADMIN')")
+    //    public RoleResponse updateRolePermissions(String roleName, Set<String> permissionIds) {
+    //        var role = roleRepository.findByName(roleName)
+    //                .orElseThrow(() -> new RuntimeException("Role not found"));
+    //
+    //        // Lấy entity role gốc để cập nhật permissions
+    //        Role existingRole = new Role();
+    //        existingRole.setName(role.getName());
+    //        existingRole.setDescription(role.getDescription());
+    //
+    //        Set<Permission> newPermissions = new HashSet<>(permissionRepository.findAllById(permissionIds));
+    //        existingRole.setPermissions(newPermissions);
+    //
+    //        existingRole = roleRepository.save(existingRole);
+    //        return roleMapper.toRoleResponse(existingRole);
+    //    }
 
     @Override
     @PreAuthorize("hasRole('ADMIN')")

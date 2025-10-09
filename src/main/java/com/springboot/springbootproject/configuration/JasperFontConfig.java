@@ -1,6 +1,7 @@
 package com.springboot.springbootproject.configuration;
 
 import jakarta.annotation.PostConstruct;
+
 import org.springframework.stereotype.Component;
 
 @Component

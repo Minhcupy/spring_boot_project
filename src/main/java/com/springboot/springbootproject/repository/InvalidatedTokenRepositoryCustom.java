@@ -1,8 +1,9 @@
 package com.springboot.springbootproject.repository;
 
-import com.springboot.springbootproject.entity.InvalidatedToken;
 import java.util.List;
 import java.util.Optional;
+
+import com.springboot.springbootproject.entity.InvalidatedToken;
 
 public interface InvalidatedTokenRepositoryCustom {
 
